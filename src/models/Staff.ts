@@ -6,10 +6,7 @@ export interface StaffDocument extends Document {
   name: string;
   role: string;
   department: string;
-  contact: {
-    email: string;
     phone: string;
-  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -20,10 +17,7 @@ const staffSchema = new Schema<StaffDocument>(
     name: { type: String, required: true },
     role: { type: String, required: true },
     department: { type: String, required: true },
-    contact: {
-      email: { type: String, required: true, unique: true },
       phone: { type: String, required: true }
-    }
   },
   {
     timestamps: true 
