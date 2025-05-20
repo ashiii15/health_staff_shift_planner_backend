@@ -12,7 +12,7 @@ connectDB();
 //middleware for cors
 app.use(cors());
 app.use(
-  "/api/",
+  "/api",
   (req: Request, res: Response, next) => {
     console.log("api users route hit");
     next();

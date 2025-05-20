@@ -3,7 +3,6 @@ import { createStaff } from "../controllers/staffController";
 
 const router = express.Router();
 
-router.post("/v1/addstaff",createStaff);
-
+router.post("/addstaff",createStaff);
 
 export default router;
