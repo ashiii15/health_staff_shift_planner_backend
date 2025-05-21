@@ -1,16 +1,13 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 
-interface Contact {
-  email?: string; // Make it optional if truly needed, but consider making it required
-  phone?: string;
-}
 // Define the interface for Staff documents
 export interface StaffDocument extends Document {
   _id: string;
   name: string;
   role: string;
   department: string;
-  contact: Contact;
+  phone: string;
+  email: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -33,7 +30,7 @@ const staffSchema = new Schema<StaffDocument>(
           "Please fill a valid email address",
         ],
       },
-      phone: { type: String },
+      phone: { type: String, required: true },
     },
   },
   {

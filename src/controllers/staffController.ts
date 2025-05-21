@@ -1,53 +1,30 @@
 import { Request, Response } from "express";
 import { Staff } from "../models/Staff";
 
-// Create Staff
 export const createStaff = async (req: Request, res: Response) => {
-  const { name, role, department, phone,email  } = req.body;
-  // console.log(req.body);
+  try {
+    console.log("Received data:", req.body);
 
-  const existingStaff = await Staff.find({ name });
+    const { name, role, department, phone, email } = req.body;
 
-  const existingStaffWithEmail = await Staff.findOne({ email });
+    if (!name || !role || !department || !phone || !email) {
+       res.status(400).json({ message: "All fields are required" });
+    }
 
-if (existingStaffWithEmail) {
-   res.status(400).json({
-    message: "Staff with this email address already exists",
-    success: false,
-  });
-}
-try{
+    const newStaff = new Staff({ name, role, department, phone, email });
+    await newStaff.save();
 
-  const newStaff = await Staff.create({
-    name,
-    role,
-    department,
-    contact: { 
-      email: email || undefined, // Handle cases where email might be optional
-      phone,
-    },
-  });
-  if (newStaff) {
-    res.status(200).json({
-      success: true,
-      message: "Succesfully created new Staff",
+     res.status(201).json({
+      message: "Staff added successfully",
+      staff: newStaff,
     });
-  } 
-  else {
-    res.status(500).json({
-      success: false,
+  } catch (error: any) {
+    console.error("Error in createStaff:", error);
+     res.status(500).json({
       message: "Internal server error",
+      error: error.message,
     });
   }
-}catch(err:any){
-  if (err.code === 11000 && err.keyPattern && err.keyPattern['contact.email']) {
-     res.status(400).json({
-      success: false,
-      message: "Staff with this email address already exists",
-    });
-  }
-}
-  
 };
 
 // get staff
@@ -70,4 +47,3 @@ export const getStaffDetails = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
-
